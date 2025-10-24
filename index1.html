@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ιωάννης Βελούδος - DOUSIS MEDIA GROUP</title>
+    <style>
+/* Screen Reader Only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+#veloudos-business-chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+}
+
+/* Toggle Button */
+#chatbot-toggle {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+    overflow: hidden;
+    border: 3px solid white;
+    outline: none;
+}
+
+#chatbot-toggle:focus {
+    outline: 3px solid #3498db;
+    outline-offset: 2px;
+}
+
+#toggle-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+#chatbot-toggle:hover,
+#chatbot-toggle:focus {
+    background: linear-gradient(135deg, #34495e, #2980b9);
+    transform: scale(1.1);
+}
+
+#chatbot-toggle:hover #toggle-photo,
+#chatbot-toggle:focus #toggle-photo {
+    transform: scale(1.1);
+}
+
+/* Chatbot Window */
+#chatbot-window {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 400px;
+    max-width: 90vw;
+    height: 650px;
+    max-height: 80vh;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 2px solid #e3f2fd;
+}
+
+#chatbot-window:focus {
+    outline: 3px solid #3498db;
+}
+
+/* Header */
+#chatbot-header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 20px;
+    position: relative;
+}
+
+#profile-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#profile-photo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid white;
+    object-fit: cover;
+}
+
+#profile-info h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+#profile-info p {
+    margin: 2px 0;
+    font-size: 13px;
+    opacity: 0.9;
+    color: white;
+}
+
+.company {
+    font-weight: bold;
+    font-size: 12px !important;
+    background: rgba(255,255,255,0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    color: white;
+}
+
+#close-chatbot {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+    font-size: 24px;
+    opacity: 0.8;
+    background: none;
+    border: none;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    outline: none;
+}
+
+#close-chatbot:hover,
+#close-chatbot:focus {
+    opacity: 1;
+    background: rgba(255,255,255,0.2);
+    outline: 2px solid white;
+}
+
+/* Content */
+#chatbot-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Contact Section */
+.contact-section {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-header h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.download-vcard {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.3s;
+    outline: none;
+}
+
+.download-vcard:hover,
+.download-vcard:focus {
+    background: #219653;
+    transform: scale(1.05);
+    outline: 2px solid #27ae60;
+}
+
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: 1px solid #f0f0f0;
+    background: white;
+    outline: none;
+}
+
+.contact-item:hover,
+.contact-item:focus {
+    background: #f8f9fa;
+    border-color: #3498db;
+    transform: translateX(5px);
+    outline: 2px solid #3498db;
+}
+
+.contact-item .icon {
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+}
+
+.contact-item .text {
+    font-size: 14px;
+    color: #2c3e50;
+    flex: 1;
+}
+
+.copy-icon, .action-icon {
+    font-size: 12px;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+.contact-item:hover .copy-icon,
+.contact-item:focus .copy-icon,
+.contact-item:hover .action-icon,
+.contact-item:focus .action-icon {
+    opacity: 1;
+}
+
+/* Social Media Section */
+.social-section {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.social-section h4 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.social-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.social-btn {
+    border: none;
+    padding: 12px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    outline: none;
+}
+
+.social-btn.instagram {
+    background: linear-gradient(135deg, #E1306C, #C13584);
+}
+
+.social-btn.facebook {
+    background: linear-gradient(135deg, #4267B2, #365899);
+}
+
+.social-btn:hover,
+.social-btn:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    outline: 2px solid currentColor;
+}
+
+.social-btn span {
+    font-size: 16px;
+}
+
+/* Actions Section */
+.actions-section {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.actions-section h4 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 14px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+    text-align: center;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.action-btn:hover,
+.action-btn:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    outline: 2px solid #3498db;
+}
+
+.action-btn span {
+    font-size: 16px;
+}
+
+/* Statistics Section */
+.stats-section {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.stats-badge {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    color: white;
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+/* Chat Interface */
+#chat-interface {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-messages {
+    flex: 1;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.bot-message {
+    background: #e3f2fd;
+    border-bottom-left-radius: 5px;
+    align-self: flex-start;
+    color: #2c3e50;
+}
+
+.user-message {
+    background: #007bff;
+    color: white;
+    border-bottom-right-radius: 5px;
+    margin-left: auto;
+}
+
+#quick-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.quick-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s;
+    outline: none;
+}
+
+.quick-btn:hover,
+.quick-btn:focus {
+    background: #2980b9;
+    outline: 2px solid #3498db;
+}
+
+#input-container {
+    display: flex;
+    gap: 10px;
+}
+
+#user-input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+#user-input:focus {
+    border-color: #3498db;
+}
+
+#send-btn {
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: none;
+}
+
+#send-btn:hover,
+#send-btn:focus {
+    background: #34495e;
+    outline: 2px solid #3498db;
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background: #27ae60;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 10001;
+    animation: slideIn 0.3s ease;
+    font-size: 14px;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    #chatbot-toggle,
+    .contact-item,
+    .social-btn,
+    .action-btn,
+    .quick-btn {
+        animation: none;
+        transition: none;
+    }
+    
+    .toast {
+        animation: none;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .contact-item {
+        border: 2px solid #2c3e50;
+    }
+    
+    .bot-message {
+        background: #d4e6f1;
+        border: 1px solid #2c3e50;
+    }
+}
+
+/* Mobile Responsive Improvements */
+@media (max-width: 768px) {
+    #chatbot-window {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        border-radius: 0 !important;
+        position: fixed !important;
+    }
+    
+    #chatbot-content {
+        padding: 15px !important;
+        height: calc(100vh - 120px) !important;
+        overflow-y: auto !important;
+    }
+    
+    #chatbot-header {
+        padding: 15px !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 10 !important;
+    }
+    
+    .contact-section,
+    .social-section,
+    .actions-section,
+    .stats-section {
+        padding: 12px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .action-buttons,
+    .social-buttons {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+    
+    .action-btn,
+    .social-btn {
+        padding: 16px 12px !important;
+        font-size: 14px !important;
+        min-height: 50px !important;
+    }
+    
+    .contact-item {
+        padding: 12px !important;
+        font-size: 14px !important;
+        min-height: 44px !important;
+    }
+    
+    .stats-badge {
+        padding: 12px !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .stat-item {
+        flex: 1 !important;
+    }
+    
+    .stat-number {
+        font-size: 16px !important;
+    }
+    
+    .stat-label {
+        font-size: 10px !important;
+    }
+    
+    /* Chat interface improvements */
+    #chat-interface {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    #chat-messages {
+        max-height: 60vh !important;
+        flex: 1 !important;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    #profile-section {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 10px !important;
+    }
+    
+    #profile-photo {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    #profile-info h3 {
+        font-size: 16px !important;
+        margin-bottom: 5px !important;
+    }
+    
+    #profile-info p {
+        font-size: 12px !important;
+        margin-bottom: 3px !important;
+    }
+    
+    .company {
+        font-size: 11px !important;
+        padding: 3px 8px !important;
+    }
+    
+    /* Better touch targets */
+    .contact-item,
+    .action-btn,
+    .social-btn {
+        min-height: 44px !important;
+    }
+}
+
+/* Prevent body scroll when chatbot is open */
+.chatbot-open {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+</style>
+</head>
+<body>
+
+<div id="veloudos-business-chatbot" role="complementary" aria-label="Ψηφιακός βοηθός επικοινωνίας Γιάννη Βελούδου">
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-toggle" aria-label="Άνοιγμα ψηφιακού βοηθού" aria-expanded="false" aria-controls="chatbot-window">
+        <img src="https://veloudos.eu/wp-content/uploads/2025/05/VELOUDOS-IOANNIS.jpg" alt="Φωτογραφία προφίλ Γιάννη Βελούδου" id="toggle-photo">
+    </button>
+
+    <!-- Chatbot Window -->
+    <div id="chatbot-window" role="dialog" aria-modal="true" aria-labelledby="chatbot-profile-name" aria-describedby="chatbot-profile-title">
+        <!-- Header -->
+        <div id="chatbot-header">
+            <div id="profile-section">
+                <img src="https://veloudos.eu/wp-content/uploads/2025/05/VELOUDOS-IOANNIS.jpg" alt="Φωτογραφία προφίλ Γιάννη Βελούδου" id="profile-photo">
+                <div id="profile-info">
+                    <h3 id="chatbot-profile-name">Ιωάννης Βελούδος</h3>
+                    <p id="chatbot-profile-title">Key Account Manager</p>
+                    <p class="company">DOUSIS MEDIA GROUP</p>
+                </div>
+            </div>
+            <button id="close-chatbot" aria-label="Κλείσιμο ψηφιακού βοηθού">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        
+        <!-- Main Content -->
+        <div id="chatbot-content">
+            <!-- Contact Information -->
+            <section class="contact-section" aria-labelledby="contact-heading">
+                <div class="section-header">
+                    <h4 id="contact-heading">📞 Επικοινωνία</h4>
+                    <button class="download-vcard" onclick="downloadVCard()" aria-label="Λήψη ηλεκτρονικής κάρτας επαφής">
+                        📥 vCard
+                    </button>
+                </div>
+                <div class="contact-list" role="list">
+                    <div class="contact-item" role="listitem" tabindex="0" onclick="copyToClipboard('iveloudos@dousiscom.gr', 'Email')" onkeydown="handleContactItemKeydown(event, 'iveloudos@dousiscom.gr', 'Email')">
+                        <span class="icon" aria-hidden="true">📧</span>
+                        <span class="text">iveloudos@dousiscom.gr</span>
+                        <span class="sr-only">Πατήστε Enter για αντιγραφή email</span>
+                        <span class="copy-icon" aria-hidden="true">⎘</span>
+                    </div>
+                    <div class="contact-item" role="listitem" tabindex="0" onclick="callPhone('+306936984720')" onkeydown="handleContactItemKeydown(event, '+306936984720', 'Κλήση')">
+                        <span class="icon" aria-hidden="true">📱</span>
+                        <span class="text">+30 693 698 4720</span>
+                        <span class="sr-only">Πατήστε Enter για κλήση</span>
+                        <span class="action-icon" aria-hidden="true">📞</span>
+                    </div>
+                    <div class="contact-item" role="listitem" tabindex="0" onclick="callPhone('+302106858190')" onkeydown="handleContactItemKeydown(event, '+302106858190', 'Κλήση')">
+                        <span class="icon" aria-hidden="true">🏢</span>
+                        <span class="text">+30 210 685 8190 (εσωτ. 412)</span>
+                        <span class="sr-only">Πατήστε Enter για κλήση</span>
+                        <span class="action-icon" aria-hidden="true">📞</span>
+                    </div>
+                    <div class="contact-item" role="listitem" tabindex="0" onclick="openMaps()" onkeydown="handleContactItemKeydown(event, 'maps', 'Χάρτης')">
+                        <span class="icon" aria-hidden="true">📍</span>
+                        <span class="text">Παύλος Μπακογιάννη 34,14451, Μεταμόρφωση</span>
+                        <span class="sr-only">Πατήστε Enter για άνοιγμα χάρτη</span>
+                        <span class="action-icon" aria-hidden="true">🗺️</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Media Links -->
+            <section class="social-section" aria-labelledby="social-heading">
+                <h4 id="social-heading">🌐 Social Media</h4>
+                <div class="social-buttons" role="group" aria-label="Διαδικτυακοί λογαριασμοί">
+                    <button class="social-btn instagram" onclick="window.open('https://www.instagram.com/veloudos/', '_blank')" aria-label="Άνοιγμα προφίλ Instagram">
+                        <span aria-hidden="true">📷</span>
+                        Instagram
+                    </button>
+                    <button class="social-btn facebook" onclick="window.open('https://www.facebook.com/yannisveloudos?locale=el_GR', '_blank')" aria-label="Άνοιγμα προφίλ Facebook">
+                        <span aria-hidden="true">👥</span>
+                        Facebook
+                    </button>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="actions-section" aria-labelledby="actions-heading">
+                <h4 id="actions-heading">🚀 Γρήγορες Ενέργειες</h4>
+                <div class="action-buttons" role="group" aria-label="Γρήγορες ενέργειες">
+                    <button class="action-btn" onclick="showMediaOptions()" aria-label="Παρουσίαση Media ομίλου">
+                        <span aria-hidden="true">📺</span>
+                        Media Ομίλου
+                    </button>
+                    <button class="action-btn" onclick="showSocialMediaOptions()" aria-label="Πληροφορίες Social Media">
+                        <span aria-hidden="true">📱</span>
+                        Social Media
+                    </button>
+                    <button class="action-btn" onclick="startLeadForm()" aria-label="Αίτημα προσφοράς">
+                        <span aria-hidden="true">📋</span>
+                        Ζήτηση Προσφοράς
+                    </button>
+                    <button class="action-btn" onclick="scheduleMeeting()" aria-label="Προγραμματισμός ραντεβού">
+                        <span aria-hidden="true">🗓️</span>
+                        Ραντεβού
+                    </button>
+                </div>
+            </section>
+
+            <!-- Statistics -->
+            <section class="stats-section" aria-label="Στατιστικά Media Ομίλου">
+                <div class="stats-badge">
+                    <div class="stat-item">
+                        <span class="stat-number">3M+</span>
+                        <span class="stat-label">Followers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">400K</span>
+                        <span class="stat-label">TV Audience</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">48K</span>
+                        <span class="stat-label">Print Copies</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Interface -->
+            <section id="chat-interface" style="display: none;" aria-labelledby="chat-heading">
+                <h5 id="chat-heading" class="sr-only">Συνομιλία με τον βοηθό</h5>
+                <div id="chat-messages" role="log" aria-live="polite" aria-atomic="false"></div>
+                <div id="quick-buttons" role="toolbar" aria-label="Γρήγορες απαντήσεις"></div>
+                <div id="input-container" style="display: none;">
+                    <label for="user-input" class="sr-only">Γράψτε το μήνυμά σας</label>
+                    <input type="text" id="user-input" placeholder="Γράψτε το μήνυμά σας..." aria-label="Μήνυμα συνομιλίας">
+                    <button id="send-btn" aria-label="Αποστολή μηνύματος">
+                        <span aria-hidden="true">▶</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+// Business Data - CORRECTED OFFICE PHONE
+const businessData = {
+    name: "Ιωάννης Βελούδος",
+    title: "Key Account Manager",
+    company: "DOUSIS MEDIA GROUP",
+    email: "iveloudos@dousiscom.gr",
+    phone: "+306936984720",
+    phoneDisplay: "+30 693 698 4720",
+    officePhone: "+302106858190", // CORRECTED: 8190 → 8190
+    officePhoneDisplay: "+30 210 685 8190 (εσωτ. 412)",
+    address: "Παύλος Μπακογιάννη 34,14451, Μεταμόρφωση",
+    photo: "https://veloudos.eu/wp-content/uploads/2025/05/VELOUDOS-IOANNIS.jpg",
+    website: "https://veloudos.eu",
+    instagram: "https://www.instagram.com/veloudos/",
+    facebook: "https://www.facebook.com/yannisveloudos?locale=el_GR"
+};
+
+// Media Information Database
+const mediaInfo = {
+    'ΕΙΚΟΝΕΣ': {
+        title: 'ΕΙΚΟΝΕΣ με τον Τάσο Δούση',
+        description: 'Ταξιδιωτική εκπομπή - Open TV, Κυριακή 17:45',
+        stats: '• 400.000 τηλεθεατές/επεισόδιο\n• 2.000.000 μηνιαίοι τηλεθεατές\n• YouTube: 29ΕΚ+ προβολές\n• Social: 1.7ΕΚ+ followers',
+        demographics: 'Γυναίκες 60%, Άνδρες 40%, Ηλικίες 25-54'
+    },
+    'HAPPY HOURS': {
+        title: 'HAPPY HOURS',
+        description: 'Lifestyle εκπομπή - Open TV, Σάββατο 17:45',
+        stats: '• Διάρκεια: 45 λεπτά\n• 8-14 θεματικές ενότητες\n• Οικογενειακό κοινό',
+        demographics: 'Οικογένειες, lifestyle enthusiasts'
+    },
+    'YOUWEEKLY': {
+        title: 'YOUWEEKLY.gr',
+        description: 'No1 γυναικείο lifestyle site',
+        stats: '• 2.6ΕΚ+ μοναδικοί επισκέπτες/μήνα\n• 223Κ Instagram followers\n• YOU TV video content',
+        demographics: 'Γυναίκες 18-45 ετών'
+    },
+    'ATHENS MAGAZINE': {
+        title: 'ATHENS MAGAZINE.gr',
+        description: 'Πολιτισμός & Τέχνες',
+        stats: '• 2.7ΕΚ+ μοναδικοί επισκέπτες/μήνα\n• 133Κ Instagram followers',
+        demographics: 'Εκλεκτικό, μορφωμένο κοινό'
+    },
+    'TRAVELSTYLE': {
+        title: 'TRAVELSTYLE.gr',
+        description: 'Ειδήσεις & Προτάσεις Ταξιδιών',
+        stats: '• 283Κ+ μοναδικοί επισκέπτες/μήνα\n• 88.7Κ Instagram followers',
+        demographics: 'Ταξιδιώτες 25-64 ετών'
+    },
+    'TV24': {
+        title: 'TV24',
+        description: 'Τηλεοπτικό περιοδικό',
+        stats: '• 24.000 αντίτυπα/εβδομάδα\n• 2.5ΕΚ+ pageviews/μήνα online\n• Ολόσελιδες & ημισέλιδες διαφημίσεις',
+        demographics: 'Ευρεία τηλεοπτική απήχηση'
+    },
+    'TV ΣΙΡΙΑΛ': {
+        title: 'TV ΣΙΡΙΑΛ',
+        description: 'Τηλεοπτικό περιοδικό σειρών',
+        stats: '• 24.000 αντίτυπα/εβδομάδα\n• 1.5ΕΚ+ pageviews/μήνα online\n• Ειδικές θέσεις & αφιερώματα',
+        demographics: 'Λάτρεις τηλεοπτικών σειρών'
+    }
+};
+
+const socialMediaInfo = {
+    'ΣΥΝΟΛΟ': {
+        stats: '**ΣΥΝΟΛΙΚΟ REACH: 3.027.155+ FOLLOWERS**\n\n• 1.852.864 Instagram\n• 822.851 Facebook\n• 351.440 TikTok\n• 202.000 YouTube\n• 29.6ΕΚ+ YouTube Views',
+        platforms: {
+            'Τάσος Δούσης': '734Κ IG, 300-650K engagement',
+            'ΕΙΚΟΝΕΣ TV': '468Κ IG, 250Κ engagement', 
+            'YOUWEEKLY': '223Κ IG, 2.6ΕΚ visitors',
+            'ATHENS MAGAZINE': '133Κ IG, 2.7ΕΚ visitors',
+            'TRAVELSTYLE': '88.7Κ IG, 283Κ visitors'
+        }
+    }
+};
+
+// Utility Functions
+function showToast(message, duration = 3000) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, duration);
+}
+
+function copyToClipboard(text, type) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast(`✅ ${type} αντιγράφηκε!`);
+    }).catch(() => {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast(`✅ ${type} αντιγράφηκε!`);
+    });
+}
+
+function callPhone(phoneNumber) {
+    window.location.href = `tel:${phoneNumber}`;
+}
+
+function openMaps() {
+    const address = encodeURIComponent(businessData.address);
+    window.open(`https://maps.google.com/?q=${address}`, '_blank');
+}
+
+// vCard Generation
+function downloadVCard() {
+    const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:${businessData.name}
+TITLE:${businessData.title}
+ORG:${businessData.company}
+EMAIL:${businessData.email}
+TEL;TYPE=CELL:${businessData.phone}
+TEL;TYPE=WORK:${businessData.officePhone}
+ADR:;;${businessData.address};;;
+URL:${businessData.website}
+NOTE:Key Account Manager - DOUSIS MEDIA GROUP
+END:VCARD`;
+
+    const blob = new Blob([vCardData], { type: 'text/vcard' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${businessData.name}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+    
+    showToast('📥 vCard downloaded!');
+}
+
+function saveContact() {
+    if (navigator.share) {
+        navigator.share({
+            title: businessData.name,
+            text: `Contact: ${businessData.name} - ${businessData.title}`,
+            url: businessData.website
+        }).then(() => {
+            showToast('✅ Επαφή κοινοποιήθηκε!');
+        });
+    } else {
+        downloadVCard();
+    }
+}
+
+function saveToPhone() {
+    downloadVCard();
+    showToast('📱 Αποθηκεύστε το vCard στο κινητό σας');
+}
+
+function shareContact() {
+    const shareText = `${businessData.name}\n${businessData.title}\n${businessData.company}\n📧 ${businessData.email}\n📱 ${businessData.phoneDisplay}\n🏢 ${businessData.officePhoneDisplay}\n🌐 ${businessData.website}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: `Επαφή - ${businessData.name}`,
+            text: shareText,
+            url: businessData.website
+        });
+    } else if (navigator.clipboard) {
+        copyToClipboard(shareText, 'Στοιχεία επικοινωνίας');
+    } else {
+        downloadVCard();
+    }
+}
+
+function scheduleMeeting() {
+    const subject = encodeURIComponent('Ραντεβού - DOUSIS MEDIA GROUP');
+    const body = encodeURIComponent(`Γεια σας κ. Βελούδε,\n\nΘα ήθελα να κανονίσουμε μια συνάντηση για να συζητήσουμε τις δυνατότητες προβολής.\n\nΜε εκτίμηση,`);
+    window.location.href = `mailto:${businessData.email}?subject=${subject}&body=${body}`;
+}
+
+// Accessibility Functions
+function handleContactItemKeydown(event, value, action) {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        if (action === 'Email') {
+            copyToClipboard(value, 'Email');
+        } else if (action === 'Κλήση') {
+            callPhone(value);
+        } else if (action === 'Χάρτης') {
+            openMaps();
+        }
+    }
+}
+
+function updateAriaExpanded(isExpanded) {
+    const toggleButton = document.getElementById('chatbot-toggle');
+    toggleButton.setAttribute('aria-expanded', isExpanded.toString());
+}
+
+// Chat Functionality
+let currentStep = 'welcome';
+let leadData = {};
+
+function initChatbot() {
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const chatMessages = document.getElementById('chat-messages');
+    const quickButtons = document.getElementById('quick-buttons');
+    const inputContainer = document.getElementById('input-container');
+
+    function sendMessage() {
+        const message = userInput.value.trim();
+        if (message) {
+            addChatMessage(message, 'user');
+            userInput.value = '';
+            handleUserResponse(message);
+        }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    function addChatMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}-message`;
+        messageDiv.textContent = text;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showQuickButtons(buttons) {
+        quickButtons.innerHTML = '';
+        buttons.forEach(button => {
+            const btn = document.createElement('button');
+            btn.className = 'quick-btn';
+            btn.textContent = button.text;
+            btn.onclick = button.action;
+            btn.setAttribute('aria-label', button.ariaLabel || button.text);
+            quickButtons.appendChild(btn);
+        });
+    }
+
+    // Global functions for action buttons
+    window.showMediaOptions = function() {
+        showChatInterface();
+        addChatMessage('📺 **MEDIA ΟΜΙΛΟΥ - DOUSIS COM**\n\nΕπιλέξτε media για λεπτομέρειες:', 'bot');
+        showQuickButtons([
+            { 
+                text: 'ΕΙΚΟΝΕΣ (Ταξίδια)', 
+                action: () => showMediaDetails('ΕΙΚΟΝΕΣ'),
+                ariaLabel: 'Πληροφορίες για ΕΙΚΟΝΕΣ'
+            },
+            { 
+                text: 'HAPPY HOURS (Lifestyle)', 
+                action: () => showMediaDetails('HAPPY HOURS'),
+                ariaLabel: 'Πληροφορίες για HAPPY HOURS'
+            },
+            { 
+                text: 'YOUWEEKLY.gr', 
+                action: () => showMediaDetails('YOUWEEKLY'),
+                ariaLabel: 'Πληροφορίες για YOUWEEKLY'
+            },
+            { 
+                text: 'ATHENS MAGAZINE.gr', 
+                action: () => showMediaDetails('ATHENS MAGAZINE'),
+                ariaLabel: 'Πληροφορίες για ATHENS MAGAZINE'
+            },
+            { 
+                text: 'TRAVELSTYLE.gr', 
+                action: () => showMediaDetails('TRAVELSTYLE'),
+                ariaLabel: 'Πληροφορίες για TRAVELSTYLE'
+            },
+            { 
+                text: 'TV24 & TV ΣΙΡΙΑΛ', 
+                action: () => showPrintMedia(),
+                ariaLabel: 'Πληροφορίες για TV24 και TV ΣΙΡΙΑΛ'
+            },
+            { 
+                text: '📋 Προσφορά', 
+                action: () => window.startLeadForm(),
+                ariaLabel: 'Αίτημα προσφοράς'
+            },
+            { 
+                text: '❌ Κλείσιμο', 
+                action: () => hideChatInterface(),
+                ariaLabel: 'Κλείσιμο συνομιλίας'
+            }
+        ]);
+    };
+
+    window.showSocialMediaOptions = function() {
+        showChatInterface();
+        addChatMessage('📱 **SOCIAL MEDIA ΠΡΟΒΟΛΗ**\n\nΣυνολικό Reach: **3.027.155+ Followers**\n\nΕπιλέξτε για λεπτομέρειες:', 'bot');
+        showQuickButtons([
+            { 
+                text: '👨 Τάσος Δούσης', 
+                action: () => showSocialDetails('Τάσος Δούσης'),
+                ariaLabel: 'Πληροφορίες για Τάσο Δούση'
+            },
+            { 
+                text: '📺 ΕΙΚΟΝΕΣ TV', 
+                action: () => showSocialDetails('ΕΙΚΟΝΕΣ TV'),
+                ariaLabel: 'Πληροφορίες για ΕΙΚΟΝΕΣ TV'
+            },
+            { 
+                text: '👩 YOUWEEKLY', 
+                action: () => showSocialDetails('YOUWEEKLY'),
+                ariaLabel: 'Πληροφορίες για YOUWEEKLY'
+            },
+            { 
+                text: '📊 Σύνολο Social', 
+                action: () => showAllSocial(),
+                ariaLabel: 'Συνολικές πληροφορίες Social Media'
+            },
+            { 
+                text: '📋 Προσφορά', 
+                action: () => window.startLeadForm(),
+                ariaLabel: 'Αίτημα προσφοράς'
+            },
+            { 
+                text: '❌ Κλείσιμο', 
+                action: () => hideChatInterface(),
+                ariaLabel: 'Κλείσιμο συνομιλίας'
+            }
+        ]);
+    };
+
+    function showMediaDetails(media) {
+        const info = mediaInfo[media];
+        const message = `**${info.title}**\n\n${info.description}\n\n📊 **Στατιστικά:**\n${info.stats}\n\n🎯 **Κοινό:**\n${info.demographics}`;
+        addChatMessage(message, 'bot');
+        showQuickButtons([
+            { text: '📋 Προσφορά', action: () => window.startLeadForm(), ariaLabel: 'Αίτημα προσφοράς' },
+            { text: '📺 Άλλα Media', action: () => window.showMediaOptions(), ariaLabel: 'Επιστροφή στα Media' },
+            { text: '❌ Κλείσιμο', action: () => hideChatInterface(), ariaLabel: 'Κλείσιμο συνομιλίας' }
+        ]);
+    }
+
+    function showPrintMedia() {
+        const message = `📰 **ΤΗΛΕΟΠΤΙΚΑ ΠΕΡΙΟΔΙΚΑ**\n\n**TV24 & TV ΣΙΡΙΑΛ**\n• 24.000 αντίτυπα το καθένα\n• Σύνολο: 48.000 σπίτια/εβδομάδα\n• Online: 4ΕΚ+ pageviews/μήνα\n\n**Διαφημιστικές Καταχωρήσεις:**\n• Ολόσελιδες & Ημισέλιδες\n• Προνομιακές Θέσεις:\n  - Οπισθόφυλλο\n  - Εσωτερική Εξωφύλλου\n  - Ειδικές Θέσεις Εντός Κειμένου`;
+        addChatMessage(message, 'bot');
+        showQuickButtons([
+            { text: '📋 Προσφορά', action: () => window.startLeadForm(), ariaLabel: 'Αίτημα προσφοράς' },
+            { text: '📺 Ηλεκτρονικά Media', action: () => window.showMediaOptions(), ariaLabel: 'Επιστροφή στα Media' },
+            { text: '❌ Κλείσιμο', action: () => hideChatInterface(), ariaLabel: 'Κλείσιμο συνομιλίας' }
+        ]);
+    }
+
+    function showSocialDetails(platform) {
+        const social = socialMediaInfo['ΣΥΝΟΛΟ'].platforms[platform];
+        const message = `**${platform.toUpperCase()}**\n\n${social}\n\n💡 **Προβολή:** Posts, Stories, Reels, Video Content`;
+        addChatMessage(message, 'bot');
+        showQuickButtons([
+            { text: '📋 Προσφορά', action: () => window.startLeadForm(), ariaLabel: 'Αίτημα προσφοράς' },
+            { text: '📱 Άλλα Social', action: () => window.showSocialMediaOptions(), ariaLabel: 'Επιστροφή στα Social Media' },
+            { text: '❌ Κλείσιμο', action: () => hideChatInterface(), ariaLabel: 'Κλείσιμο συνομιλίας' }
+        ]);
+    }
+
+    function showAllSocial() {
+        const message = `**ΣΥΝΟΛΙΚΟ SOCIAL MEDIA REACH**\n\n📊 ${socialMediaInfo['ΣΥΝΟΛΟ'].stats}\n\n**Κορυφαίοι Λογαριασμοί:**\n• @tasosdousis: 734Κ IG\n• @eikonesbytasosdousis: 468Κ IG\n• @youweekly.gr: 223Κ IG\n• @athensmagazine.gr: 133Κ IG\n• @travelstyle.gr: 88.7Κ IG`;
+        addChatMessage(message, 'bot');
+        showQuickButtons([
+            { text: '📋 Social Package', action: () => window.startLeadForm(), ariaLabel: 'Αίτημα Social Media package' },
+            { text: '📱 Ατομικές Πλατφόρμες', action: () => window.showSocialMediaOptions(), ariaLabel: 'Επιστροφή στα Social Media' },
+            { text: '❌ Κλείσιμο', action: () => hideChatInterface(), ariaLabel: 'Κλείσιμο συνομιλίας' }
+        ]);
+    }
+
+    window.startLeadForm = function() {
+        showChatInterface();
+        currentStep = 'lead_form';
+        leadData = {};
+        addChatMessage('📋 **ΑΙΤΗΜΑ ΠΡΟΣΦΟΡΑΣ**\n\nΓια να σας ετοιμάσω μια προσφορά, χρειάζομαι λίγες πληροφορίες.\n\nΠώς σας λένε;', 'bot');
+        inputContainer.style.display = 'flex';
+        userInput.focus();
+        quickButtons.innerHTML = '';
+    };
+
+    function handleUserResponse(response) {
+        if (currentStep === 'lead_form') {
+            handleLeadForm(response);
+        } else {
+            addChatMessage('Μπορώ να σας βοηθήσω καλύτερα επιλέγοντας μια από τις επιλογές παραπάνω. Τι σας ενδιαφέρει;', 'bot');
+            showQuickButtons([
+                { text: '📺 Media Ομίλου', action: () => window.showMediaOptions(), ariaLabel: 'Πληροφορίες Media ομίλου' },
+                { text: '📱 Social Media', action: () => window.showSocialMediaOptions(), ariaLabel: 'Πληροφορίες Social Media' },
+                { text: '📋 Προσφορά', action: () => window.startLeadForm(), ariaLabel: 'Αίτημα προσφοράς' },
+                { text: '❌ Κλείσιμο', action: () => hideChatInterface(), ariaLabel: 'Κλείσιμο συνομιλίας' }
+            ]);
+        }
+    }
+
+    function handleLeadForm(response) {
+        if (!leadData.name) {
+            leadData.name = response;
+            addChatMessage(`Ευχαριστώ, ${response}! Ποια είναι η εταιρεία σας;`, 'bot');
+        } else if (!leadData.company) {
+            leadData.company = response;
+            addChatMessage(`Ποιο είναι το email σας;`, 'bot');
+        } else if (!leadData.email) {
+            leadData.email = response;
+            completeLeadForm();
+        }
+    }
+
+    function completeLeadForm() {
+        addChatMessage(`✅ **ΕΥΧΑΡΙΣΤΟΥΜΕ, ${leadData.name.toUpperCase()}!**\n\nΟ Key Account Manager, Γιάννης Βελούδος, θα επικοινωνήσει μαζί σας στο ${leadData.email} μέσα στην επόμενη εργάσιμη ημέρα για να συζητήσετε τη προσφορά σας.`, 'bot');
+        
+        // Log lead data
+        console.log('New Lead:', leadData);
+        
+        showQuickButtons([
+            { text: '📞 Καλέστε Τώρα', action: () => callPhone(businessData.phone), ariaLabel: 'Κλήση τώρα' },
+            { text: '📧 Στείλτε Email', action: () => window.location.href = `mailto:${businessData.email}?subject=Προσφορά&body=Γεια σας κ. Βελούδε,`, ariaLabel: 'Αποστολή email' },
+            { text: '✅ ΟΚ', action: () => hideChatInterface(), ariaLabel: 'Κλείσιμο συνομιλίας' }
+        ]);
+        inputContainer.style.display = 'none';
+        currentStep = 'welcome';
+    }
+
+    function showChatInterface() {
+        document.getElementById('chat-interface').style.display = 'flex';
+        document.getElementById('chatbot-content').scrollTop = document.getElementById('chatbot-content').scrollHeight;
+    }
+
+    function hideChatInterface() {
+        document.getElementById('chat-interface').style.display = 'none';
+        document.getElementById('chat-messages').innerHTML = '';
+        document.getElementById('quick-buttons').innerHTML = '';
+        document.getElementById('input-container').style.display = 'none';
+        currentStep = 'welcome';
+    }
+}
+
+// Initialize Chatbot
+document.addEventListener('DOMContentLoaded', function() {
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotWindow = document.getElementById('chatbot-window');
+    const closeChatbot = document.getElementById('close-chatbot');
+
+    // Update with personal data
+    document.getElementById('profile-info').querySelector('h3').textContent = businessData.name;
+    document.getElementById('profile-info').querySelectorAll('p')[0].textContent = businessData.title;
+    document.getElementById('profile-info').querySelector('.company').textContent = businessData.company;
+    document.getElementById('profile-photo').src = businessData.photo;
+    document.getElementById('toggle-photo').src = businessData.photo;
+
+    // Update contact information
+    const contactItems = document.querySelectorAll('.contact-item .text');
+    contactItems[0].textContent = businessData.email;
+    contactItems[1].textContent = businessData.phoneDisplay;
+    contactItems[2].textContent = businessData.officePhoneDisplay;
+    contactItems[3].textContent = businessData.address;
+
+    // Toggle functionality
+    chatbotToggle.addEventListener('click', function() {
+        const isVisible = chatbotWindow.style.display === 'flex';
+        chatbotWindow.style.display = isVisible ? 'none' : 'flex';
+        updateAriaExpanded(!isVisible);
+        
+        // Toggle body class for scroll prevention
+        if (!isVisible) {
+            document.body.classList.add('chatbot-open');
+            chatbotWindow.focus();
+        } else {
+            document.body.classList.remove('chatbot-open');
+            hideChatInterface();
+        }
+    });
+
+    chatbotToggle.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            chatbotToggle.click();
+        }
+    });
+
+    closeChatbot.addEventListener('click', function() {
+        chatbotWindow.style.display = 'none';
+        updateAriaExpanded(false);
+        chatbotToggle.focus();
+        document.body.classList.remove('chatbot-open');
+        hideChatInterface();
+    });
+
+    closeChatbot.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            closeChatbot.click();
+        }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && chatbotWindow.style.display === 'flex') {
+            chatbotWindow.style.display = 'none';
+            updateAriaExpanded(false);
+            chatbotToggle.focus();
+            document.body.classList.remove('chatbot-open');
+            hideChatInterface();
+        }
+    });
+
+    // Initialize chat functionality
+    initChatbot();
+});
+
+// Global functions
+window.downloadVCard = downloadVCard;
+window.copyToClipboard = copyToClipboard;
+window.callPhone = callPhone;
+window.openMaps = openMaps;
+window.saveContact = saveContact;
+window.saveToPhone = saveToPhone;
+window.shareContact = shareContact;
+window.scheduleMeeting = scheduleMeeting;
+window.handleContactItemKeydown = handleContactItemKeydown;
+window.showMediaOptions = showMediaOptions;
+window.showSocialMediaOptions = showSocialMediaOptions;
+window.startLeadForm = startLeadForm;
+</script>
+</body>
+</html>
